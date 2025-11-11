@@ -34,6 +34,31 @@ export function toError(error: unknown): Error {
 		return new Error(messageStr);
 	}
 	
+	// Handle primitive types explicitly to avoid ESLint no-base-to-string
+	if (error === null) {
+		return new Error('null');
+	}
+	
+	if (error === undefined) {
+		return new Error('undefined');
+	}
+	
+	if (typeof error === 'number' || typeof error === 'boolean') {
+		return new Error(String(error));
+	}
+	
+	// Handle arrays - String([1,2,3]) = "1,2,3", String([]) = ""
+	if (Array.isArray(error)) {
+		return new Error(error.length === 0 ? '' : error.join(','));
+	}
+	
+	// Handle objects without message property - String({}) = "[object Object]"
+	if (typeof error === 'object') {
+		return new Error('[object Object]');
+	}
+	
+	// Fallback for any other type (should never reach here in practice)
+	// eslint-disable-next-line @typescript-eslint/no-base-to-string
 	return new Error(String(error));
 }
 

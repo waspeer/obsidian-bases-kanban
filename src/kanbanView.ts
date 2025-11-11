@@ -285,7 +285,7 @@ export class KanbanView extends BasesView {
 				ghostClass: CSS_CLASSES.CARD_GHOST,
 				chosenClass: CSS_CLASSES.CARD_CHOSEN,
 				onEnd: (evt: Sortable.SortableEvent) => {
-					this.handleCardDrop(evt);
+					void this.handleCardDrop(evt);
 				},
 			});
 
@@ -373,7 +373,7 @@ export class KanbanView extends BasesView {
 			const parsedProperty = parsePropertyId(this.groupByPropertyId);
 			const propertyName = parsedProperty.name;
 			
-			await this.app.fileManager.processFrontMatter(entry.file, (frontmatter) => {
+			await this.app.fileManager.processFrontMatter(entry.file, (frontmatter: Record<string, unknown>) => {
 				if (valueToSet === '') {
 					// Remove the property if setting to empty
 					delete frontmatter[propertyName];
@@ -416,7 +416,7 @@ export class KanbanView extends BasesView {
 			ghostClass: CSS_CLASSES.COLUMN_GHOST,
 			dragClass: CSS_CLASSES.COLUMN_DRAGGING,
 			onEnd: (evt: Sortable.SortableEvent) => {
-				this.handleColumnDrop(evt);
+				void this.handleColumnDrop(evt);
 			},
 		});
 	}
